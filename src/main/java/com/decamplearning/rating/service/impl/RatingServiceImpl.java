@@ -24,6 +24,7 @@ public class RatingServiceImpl implements RatingService {
         Rating rating = new Rating();
         rating.setRatingDescription(createRatingRequestDto.getDescription());
         rating.setScore(createRatingRequestDto.getScore());
+        rating.setBookId(createRatingRequestDto.getBookId());
         return this.ratingRepository.save(rating).map(entity ->  new CreateRatingResponseDto(entity.getId()));
     }
 
@@ -33,6 +34,7 @@ public class RatingServiceImpl implements RatingService {
                 .bookId(rating.getBookId())
                 .description(rating.getRatingDescription())
                 .id(rating.getId())
+                .creationDate(rating.getCreationDate())
                 .score(rating.getScore())
                 .build());
     }

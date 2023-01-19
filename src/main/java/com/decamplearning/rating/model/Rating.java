@@ -2,6 +2,7 @@ package com.decamplearning.rating.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,13 +12,12 @@ import java.util.Date;
 @Getter
 @Setter
 public class Rating {
-
     @Id
     private String id;
     private Integer bookId;
     private String ratingDescription;
-
-    private Date creationDate;
+    @CreatedDate
+    private Date creationDate = new Date();
     private Integer score;
     private RatingUtility[] ratingUtilities;
 
