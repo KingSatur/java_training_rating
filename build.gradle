@@ -1,0 +1,64 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.decamp-learning'
+version = '1.0'
+sourceCompatibility = '11'
+description = 'This handle all the operations concerned with rating books'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2021.0.4")
+}
+
+def getCommitInfo = { ->
+	def stdout = new ByteArrayOutputStream()
+	exec {
+		commandLine 'git', 'rev-parse', '--short', 'HEAD'
+		standardOutput = stdout
+	}
+	return stdout.toString().trim()
+}
+
+ext.commitInfo = getCommitInfo()
+
+processResources{
+	filesMatching('bootstrap.yml') {
+		expand(project.properties)
+	}
+}
+
+compileJava.dependsOn(processResources)
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'io.projectreactor:reactor-test'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+	implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+tasks.withType(JavaCompile)
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
