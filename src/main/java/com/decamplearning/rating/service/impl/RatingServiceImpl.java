@@ -6,11 +6,13 @@ import com.decamplearning.rating.dto.RatingDto;
 import com.decamplearning.rating.model.Rating;
 import com.decamplearning.rating.repository.RatingRepository;
 import com.decamplearning.rating.service.RatingService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@Slf4j
 public class RatingServiceImpl implements RatingService {
 
     private final RatingRepository ratingRepository;
@@ -30,6 +32,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Flux<RatingDto> getRatingsByBook(Integer bookId) {
+        log.info("Returning book rating list");
         return this.ratingRepository.findByBookId(bookId).map(rating -> RatingDto.builder()
                 .bookId(rating.getBookId())
                 .description(rating.getRatingDescription())
