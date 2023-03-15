@@ -41,7 +41,8 @@ class RatingServiceImplTest {
         Mockito.when(this.ratingRepository.save(Mockito.any(Rating.class))).thenReturn(
                 Mono.just(rating)
         );
-        Mono<CreateRatingResponseDto> createRatingResponseDto = this.ratingService.createRatingForBook(createRatingRequestDto);
+        Mono<CreateRatingResponseDto> createRatingResponseDto = this.ratingService
+                .createRatingForBook(createRatingRequestDto, "");
         Mockito.verify(this.ratingRepository, Mockito.atLeastOnce() ).save(Mockito.any(Rating.class));
         Assertions.assertNotNull(createRatingResponseDto);
         CreateRatingResponseDto createRatingResponseDto1 = createRatingResponseDto.block();
@@ -58,7 +59,7 @@ class RatingServiceImplTest {
         Mockito.when(this.ratingRepository.findByBookId(Mockito.anyInt())).thenReturn(
                 Flux.just(rating)
         );
-        Flux<RatingDto> ratings = this.ratingService.getRatingsByBook(10);
+        Flux<RatingDto> ratings = this.ratingService.getRatingsByBook(10, "");
         Mockito.verify(this.ratingRepository, Mockito.atLeastOnce() ).findByBookId(Mockito.anyInt());
         Assertions.assertNotNull(ratings);
         StepVerifier.create(ratings)

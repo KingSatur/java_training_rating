@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -26,16 +27,18 @@ public class RatingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Flux<RatingDto>> getRatingsByBook(
-            @PathVariable("id") int bookId
+            @PathVariable("id") int bookId,
+            @RequestHeader("java-training-correlation-id") String correlationId
     ) {
-        return ResponseEntity.ok(this.ratingService.getRatingsByBook(bookId));
+        return ResponseEntity.ok(this.ratingService.getRatingsByBook(bookId,correlationId));
     }
 
     @PostMapping
     public ResponseEntity<Mono<CreateRatingResponseDto>> createRating(
-            @RequestBody CreateRatingRequestDto createRatingRequestDto
+            @RequestBody CreateRatingRequestDto createRatingRequestDto,
+            @RequestHeader("java-training-correlation-id") String correlationId
             ){
-       return ResponseEntity.ok(this.ratingService.createRatingForBook(createRatingRequestDto));
+       return ResponseEntity.ok(this.ratingService.createRatingForBook(createRatingRequestDto,correlationId));
     }
 
 }

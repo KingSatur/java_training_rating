@@ -3,7 +3,6 @@ package com.decamplearning.rating.controller;
 import com.decamplearning.rating.dto.CreateRatingResponseDto;
 import com.decamplearning.rating.dto.RatingDto;
 import com.decamplearning.rating.service.RatingService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +24,17 @@ class RatingControllerTest {
     @Autowired
     private WebTestClient webClient;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Test
     void shouldCreateRatingForBook() throws Exception {
         CreateRatingResponseDto createRatingResponseDto =
                 new CreateRatingResponseDto("3415f4ce-62e7-46a8-8f77-728d6d8fbd3e");
-        Mockito.when(this.ratingService.createRatingForBook(Mockito.any())).thenReturn(
+        Mockito.when(this.ratingService.createRatingForBook(Mockito.any(), Mockito.anyString())).thenReturn(
                 Mono.just(createRatingResponseDto)
         );
         this.webClient
                 .post()
                 .uri("/rating")
+                .header("java-training-correlation-id", "12312123")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(createRatingResponseDto)
                 .exchange()
@@ -52,12 +49,13 @@ class RatingControllerTest {
     void shouldGetRatingForSpecificBook(){
         RatingDto ratingDto = new RatingDto("3415f4ce-62e7-46a8-8f77-728d6d8fbd9e",
                 20, "Description", new Date(), 300);
-        Mockito.when(this.ratingService.getRatingsByBook(Mockito.any())).thenReturn(
+        Mockito.when(this.ratingService.getRatingsByBook(Mockito.any(),Mockito.anyString())).thenReturn(
                 Flux.just(ratingDto)
         );
         Flux<RatingDto> ratings = this.webClient
                 .get()
                 .uri("/rating/20")
+                .header("java-training-correlation-id", "12312123")
                 .exchange().returnResult(RatingDto.class).getResponseBody();
 
         StepVerifier.create(ratings)

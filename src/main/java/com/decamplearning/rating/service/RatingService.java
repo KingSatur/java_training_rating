@@ -8,8 +8,8 @@ import reactor.core.publisher.Mono;
 
 public interface RatingService {
 
-    Mono<CreateRatingResponseDto> createRatingForBook(CreateRatingRequestDto createRatingRequestDto);
-
-    Flux<RatingDto> getRatingsByBook(Integer bookId);
+    Mono<CreateRatingResponseDto> createRatingForBook(CreateRatingRequestDto createRatingRequestDto,
+                                                      String correlationId);
+    Flux<RatingDto> getRatingsByBook(Integer bookId, String correlationId);
 
 }
