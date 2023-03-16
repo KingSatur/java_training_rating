@@ -6,6 +6,7 @@ import com.decamplearning.rating.service.RatingService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -15,7 +16,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import java.util.Date;
 
-@WebFluxTest(controllers = {RatingController.class})
+@WebFluxTest(controllers = {RatingController.class},
+        excludeAutoConfiguration = {ReactiveSecurityAutoConfiguration.class})
 class RatingControllerTest {
 
     @MockBean
