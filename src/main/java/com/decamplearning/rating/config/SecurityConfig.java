@@ -25,7 +25,7 @@ public class SecurityConfig {
                     return configuration;
                 }).and().authorizeExchange(authorizeExchangeSpec ->
                         authorizeExchangeSpec
-                                .pathMatchers("/**")
+                                .pathMatchers("/**", "/actuator/**")
                                 .permitAll()
                                 .anyExchange()
                                 .authenticated()
